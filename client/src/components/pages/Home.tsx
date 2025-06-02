@@ -1,0 +1,187 @@
+import React, { useState, ComponentProps, useDeferredValue } from 'react'
+import styled from '@emotion/styled'
+import { ThemeProvider } from '@emotion/react'
+import { Card, ConfigProvider, Input, theme } from 'antd'
+import queryString from 'query-string'
+import VersionSelector from '../common/VersionSelector'
+import DiffViewer, { DiffViewerProps } from '../common/DiffViewer'
+import { useGetLanguageFromURL } from '../../hooks/get-language-from-url'
+import { useGetPackageNameFromURL } from '../../hooks/get-package-name-from-url'
+import { DarkModeButton } from '../common/DarkModeButton'
+import { deviceSizes } from '../../utils/device-sizes'
+import { darkTheme, type Theme } from '../../theme'
+import { SettingsProvider } from '../../SettingsProvider'
+
+const homepage = '/'
+
+const Page = styled.div<{ theme?: Theme }>`
+  background-color: ${({ theme }) => theme.background};
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  padding-top: 30px;
+`
+
+const Container2 = styled.div`
+  padding: 0 16px;
+`
+const Container = styled(Card)<{ theme?: Theme }>`
+  background-color: ${({ theme }) => theme.background};
+  width: 90%;
+  border-radius: 3px;
+  border-color: ${({ theme }) => theme.border};
+`
+
+const HeaderContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  @media ${deviceSizes.tablet} {
+    flex-direction: row;
+  }
+`
+
+const LogoImg = styled.img`
+  width: 50px;
+  margin-bottom: 15px;
+
+  @media ${deviceSizes.tablet} {
+    width: 100px;
+  }
+`
+
+const TitleHeader = styled.h1`
+  margin: 0 0 0 15px;
+`
+
+const TitleContainer = styled.div`
+  display: flex;
+  align-items: center;
+  margin-bottom: 8px;
+`
+
+const SettingsContainer = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 15px;
+  margin-bottom: 8px;
+  flex: 1;
+`
+
+const getAppInfoInURL = () => {
+  // Parses `/?name=RnDiffApp&package=com.rndiffapp` from URL
+  const { name, package: pkg } = queryString.parse(window.location.search)
+
+  return {
+    appPackage: pkg as string,
+    appName: name as string | null,
+  }
+}
+
+const Home = () => {
+  const { packageName: defaultPackageName, isPackageNameDefinedInURL } =
+    useGetPackageNameFromURL()
+  const defaultLanguage = useGetLanguageFromURL()
+  const [packageName, setPackageName] = useState(defaultPackageName)
+  const [fromVersion, setFromVersion] = useState('')
+  const [toVersion, setToVersion] = useState('')
+  const [shouldShowDiff, setShouldShowDiff] = useState(false)
+
+  const appInfoInURL = getAppInfoInURL()
+  const [appName] = useState(appInfoInURL.appName)
+  const [appPackage] = useState<string>(appInfoInURL.appPackage)
+
+  // Avoid UI lag when typing.
+  const deferredAppName = useDeferredValue(appName || '')
+  const deferredAppPackage = useDeferredValue(appPackage)
+
+  const handleShowDiff = ({
+    fromVersion,
+    toVersion,
+  }: {
+    fromVersion: string
+    toVersion: string
+  }) => {
+    setFromVersion(fromVersion)
+    setToVersion(toVersion)
+    setShouldShowDiff(true)
+  }
+
+  const { darkAlgorithm } = theme // Get default and dark mode states from antd.
+
+  return (
+    <SettingsProvider>
+      <ConfigProvider
+        theme={{
+          algorithm: darkAlgorithm,
+        }}
+      >
+        <ThemeProvider theme={darkTheme}>
+          <Page>
+            <Container>
+              <HeaderContainer>
+                <TitleContainer>
+                  <a href={homepage}>
+                    <TitleHeader>Choose your package</TitleHeader>
+                  </a>
+                </TitleContainer>
+                <Container2>
+                  <Input
+                    value={packageName}
+                    onChange={(e) => {
+                      setPackageName(e.target.value)
+                    }}
+                  />
+                </Container2>
+                <SettingsContainer>
+                  <DarkModeButton isDarkMode />
+                </SettingsContainer>
+              </HeaderContainer>
+
+              <VersionSelector
+                key={defaultPackageName}
+                showDiff={handleShowDiff}
+                // fromVersion={fromVersion}
+                // toVersion={toVersion}
+                packageName={defaultPackageName}
+                language={defaultLanguage}
+                isPackageNameDefinedInURL={isPackageNameDefinedInURL}
+              />
+            </Container>
+            <BackstageDiffViewer
+              //@ts-expect-error - the component prop type is messed up
+              shouldShowDiff={shouldShowDiff}
+              fromVersion={fromVersion}
+              toVersion={toVersion}
+              appName={deferredAppName}
+              appPackage={''}
+              packageName={packageName}
+            />
+          </Page>
+        </ThemeProvider>
+      </ConfigProvider>
+    </SettingsProvider>
+  )
+}
+
+function BackstageDiffViewer(props: ComponentProps<typeof DiffViewer>) {
+  const { fromVersion, toVersion } = props as unknown as DiffViewerProps
+
+  if (fromVersion && fromVersion === toVersion) {
+    return (
+      <div style={{ textAlign: 'center', width: '90%' }}>
+        <p>
+          The selected versions share the same dependencies. This usually
+          happens when a patch for one of the dependencies is released.
+        </p>
+        <p>Please refer to the to see what has changed.</p>
+      </div>
+    )
+  }
+  return <DiffViewer {...props} />
+}
+
+export default Home
