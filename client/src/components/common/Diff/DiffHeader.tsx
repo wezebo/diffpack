@@ -379,7 +379,7 @@ const DiffHeader = ({
           toVersion={toVersion}
         />
         <DiffCommentReminder
-          comments={diffComments}
+          comments={diffComments as any}
           isDiffCollapsed={isDiffCollapsed}
           uncollapseDiff={() => setIsDiffCollapsed(false)}
         />

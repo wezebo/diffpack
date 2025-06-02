@@ -32,3 +32,7 @@ yarn-error.log*
 
 # testing
 /.jest
+
+/dist
+
+tsconfig.tsbuildinfo
