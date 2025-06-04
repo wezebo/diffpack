@@ -41,56 +41,57 @@ export const useFetchDiff = ({
 
   useEffect(() => {
     const fetchDiff = async () => {
-      setIsLoading(true)
-      setIsDone(false)
+      try {
+        setIsLoading(true)
+        setIsDone(false)
+        const [response] = await Promise.all([
+          fetch(
+            getDiffURL({
+              packageName,
+              language,
+              fromVersion,
+              toVersion,
+            })
+          ),
+          delay(300),
+        ])
 
-      const [response] = await Promise.all([
-        fetch(
-          getDiffURL({
-            packageName,
-            language,
-            fromVersion,
-            toVersion,
-          }),
-        ),
-        delay(300),
-      ])
-
-      const res = (await response.json())as {
-        files: FileDiff[]
-      }
-
-      let diff = ''
-      for (const file of res.files) {
-        if (file.patch) {
-          diff += `diff --git a/${file.filename} b/${file.filename}\n`
-          switch (file.status){
-            case 'added':
-              diff += `new file mode 100644\n`
-              break
-            case 'removed':
-              diff += `deleted file mode 100644\n`
-              break
-            case 'modified':
-              diff += `index ${file.sha}..${file.sha} 100644\n`
-              break
-            default:
-              diff += `index ${file.sha}..${file.sha} 100644\n`
-              break
-          }
-          diff += `--- a/${file.filename}\n`
-          diff += `+++ b/${file.filename}\n`
-          diff += file.patch
-          diff += '\n'
+        const res = (await response.json()) as {
+          files: FileDiff[]
         }
+
+        let diff = ''
+        for (const file of res.files) {
+          if (file.patch) {
+            diff += `diff --git a/${file.filename} b/${file.filename}\n`
+            switch (file.status) {
+              case 'added':
+                diff += `new file mode 100644\n`
+                break
+              case 'removed':
+                diff += `deleted file mode 100644\n`
+                break
+              case 'modified':
+                diff += `index ${file.sha}..${file.sha} 100644\n`
+                break
+              default:
+                diff += `index ${file.sha}..${file.sha} 100644\n`
+                break
+            }
+            diff += `--- a/${file.filename}\n`
+            diff += `+++ b/${file.filename}\n`
+            diff += file.patch
+            diff += '\n'
+          }
+        }
+
+        setDiff(applyBackstageDiff(response, parseDiff(diff)))
+
+      } catch (e) {
+        setDiff(new Error('Failed to fetch diff. Please try again later.'))
       }
-
-      setDiff(applyBackstageDiff(response, parseDiff(diff)))
-
       setIsLoading(false)
       setIsDone(true)
-
-      return
     }
 
     if (shouldShowDiff) {

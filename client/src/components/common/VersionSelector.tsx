@@ -24,22 +24,8 @@ const VersionSelector = ({
   showDiff,
 }: {
   packageName?: string
-  language?: string
-  isPackageNameDefinedInURL: boolean
   showDiff: (args: { fromVersion: string; toVersion: string }) => void
-  showReleaseCandidates?: boolean
-  appPackage?: string
-  appName?: string
 }) => {
-  const {
-    settings: { [SHOW_LATEST_RCS]: showReleaseCandidates },
-  } = useSettings()
-
-  // const [allVersions, setAllVersions] = useState<ReleaseT[]>([])
-  // const [fromVersionList, setFromVersionList] = useState<ReleaseT[]>([])
-  // const [toVersionList, setToVersionList] = useState<ReleaseT[]>([])
-  // const [hasVersionsFromURL, setHasVersionsFromURL] = useState<boolean>(false)
-  //
   const fromVersion = useSearchParam('from') || ''
   const toVersion = useSearchParam('to') || ''
 
@@ -47,127 +33,6 @@ const VersionSelector = ({
   const [localToVersion, setLocalToVersion] = useState<string>(toVersion)
 
   const upgradeButtonEl = useRef<HTMLAnchorElement | HTMLButtonElement>(null)
-  // const { isDone, isLoading, releases, setSelectedVersions } = useReleases()
-  // const releaseVersions = useMemo(
-  //   () => releases?.map(({ version }) => version),
-  //   [releases]
-  // )
-
-  // useEffect(() => {
-  //   // const versionsInURL = getVersionsInURL()
-  //
-  //   const fetchVersions = async () => {
-  //     // Check if the versions provided in the URL are valid
-  //     const hasFromVersionInURL = doesVersionExist({
-  //       version: fromVersion,
-  //       allVersions: releaseVersions,
-  //     })
-  //
-  //     const hasToVersionInURL = doesVersionExist({
-  //       version: toVersion,
-  //       allVersions: releaseVersions,
-  //       minVersion: fromVersion,
-  //     })
-  //
-  //     const latestVersion = releaseVersions[0]
-  //     // If the version from URL is not valid then fallback to the latest
-  //     const toVersionToBeSet = hasToVersionInURL ? toVersion : latestVersion
-  //
-  //     // Remove `rc` versions from the array of versions
-  //     const sanitizedVersionsWithReleases = getReleasedVersionsWithCandidates({
-  //       releasedVersions: releases,
-  //       toVersion: toVersionToBeSet,
-  //       latestVersion,
-  //       showReleaseCandidates,
-  //     })
-  //
-  //     const sanitizedVersions = sanitizedVersionsWithReleases.map(
-  //       ({ version }) => version
-  //     )
-  //
-  //     setAllVersions(sanitizedVersionsWithReleases)
-  //
-  //     const fromVersionToBeSet = hasFromVersionInURL
-  //       ? fromVersion
-  //       : // Get first major release before latest
-  //         getFirstRelease(
-  //           {
-  //             releasedVersions: sanitizedVersions,
-  //             versionToCompare: toVersionToBeSet,
-  //           },
-  //           'minor'
-  //         ) ||
-  //         getFirstRelease(
-  //           {
-  //             releasedVersions: sanitizedVersions,
-  //             versionToCompare: toVersionToBeSet,
-  //           },
-  //           'patch'
-  //         )
-  //
-  //     setFromVersionList(
-  //       getReleasedVersions({
-  //         releasedVersions: sanitizedVersionsWithReleases,
-  //         maxVersion: toVersionToBeSet,
-  //       })
-  //     )
-  //     setToVersionList(
-  //       getReleasedVersions({
-  //         releasedVersions: sanitizedVersionsWithReleases,
-  //         minVersion: fromVersionToBeSet,
-  //       })
-  //     )
-  //
-  //     setLocalFromVersion(fromVersionToBeSet ?? '')
-  //     setLocalToVersion(toVersionToBeSet)
-  //
-  //     const doesHaveVersionsInURL = hasFromVersionInURL && hasToVersionInURL
-  //
-  //     setHasVersionsFromURL(!!doesHaveVersionsInURL)
-  //   }
-  //
-  //   if (isDone) {
-  //     fetchVersions()
-  //   }
-  // }, [
-  //   fromVersion,
-  //   toVersion,
-  //   isDone,
-  //   releaseVersions,
-  //   setLocalFromVersion,
-  //   setLocalToVersion,
-  //   showReleaseCandidates,
-  // ])
-  //
-  // useEffect(() => {
-  //   if (isLoading) {
-  //     return
-  //   }
-  //
-  //   setFromVersionList(
-  //     getReleasedVersions({
-  //       releasedVersions: allVersions,
-  //       maxVersion: localToVersion,
-  //     })
-  //   )
-  //   setToVersionList(
-  //     getReleasedVersions({
-  //       releasedVersions: allVersions,
-  //       minVersion: localFromVersion,
-  //     })
-  //   )
-  //
-  //   if (hasVersionsFromURL) {
-  //     upgradeButtonEl?.current?.click()
-  //   }
-  // }, [
-  //   isLoading,
-  //   allVersions,
-  //   localFromVersion,
-  //   localToVersion,
-  //   hasVersionsFromURL,
-  //   showReleaseCandidates,
-  // ])
 
   const onShowDiff = () => {
     updateURL({
@@ -238,5 +103,3 @@ const VersionSelector = ({
 }
 
 export default VersionSelector
-
-

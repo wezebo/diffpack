@@ -167,15 +167,6 @@ const DiffViewer = ({
 
   const [, jumpToAnchorOnce] = useReducer(jumpToAnchor, false)
 
-  let changelog
-  if (!toVersion.includes('-rc')) {
-    const href = getChangelogURL({ packageName, version: toVersion })
-    changelog = (
-      <Link href={href} target="_blank" rel="noreferrer">
-        changelog
-      </Link>
-    )
-  }
 
   useEffect(() => {
     if (!isDone) {
@@ -183,6 +174,9 @@ const DiffViewer = ({
     }
   }, [isDone])
 
+  if (!shouldShowDiff) {
+    return null
+  }
 
   if (isLoading) {
     return (

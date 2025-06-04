@@ -7,7 +7,6 @@ export function updateURL(
     packageName?: string
     fromVersion?: string
     toVersion?: string
-    yarnPlugin?: boolean
   }
 ) {
   const url = new URL(window.location.href)

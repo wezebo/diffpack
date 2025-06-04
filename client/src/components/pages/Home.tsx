@@ -5,11 +5,9 @@ import { Card, ConfigProvider, Input, theme } from 'antd'
 import queryString from 'query-string'
 import VersionSelector from '../common/VersionSelector'
 import DiffViewer, { DiffViewerProps } from '../common/DiffViewer'
-import { useGetLanguageFromURL } from '../../hooks/get-language-from-url'
-import { useGetPackageNameFromURL } from '../../hooks/get-package-name-from-url'
 import { DarkModeButton } from '../common/DarkModeButton'
 import { deviceSizes } from '../../utils/device-sizes'
-import { darkTheme, type Theme } from '../../theme'
+import { lightTheme, type Theme } from '../../theme'
 import { SettingsProvider } from '../../SettingsProvider'
 
 const homepage = '/'
@@ -72,7 +70,6 @@ const SettingsContainer = styled.div`
 `
 
 const getAppInfoInURL = () => {
-  // Parses `/?name=RnDiffApp&package=com.rndiffapp` from URL
   const { name, package: pkg } = queryString.parse(window.location.search)
 
   return {
@@ -82,21 +79,15 @@ const getAppInfoInURL = () => {
 }
 
 const Home = () => {
-  const { packageName: defaultPackageName, isPackageNameDefinedInURL } =
-    useGetPackageNameFromURL()
-  const defaultLanguage = useGetLanguageFromURL()
-  const [packageName, setPackageName] = useState(defaultPackageName)
+  const [packageName, setPackageName] = useState('')
   const [fromVersion, setFromVersion] = useState('')
   const [toVersion, setToVersion] = useState('')
   const [shouldShowDiff, setShouldShowDiff] = useState(false)
 
   const appInfoInURL = getAppInfoInURL()
   const [appName] = useState(appInfoInURL.appName)
-  const [appPackage] = useState<string>(appInfoInURL.appPackage)
-
   // Avoid UI lag when typing.
   const deferredAppName = useDeferredValue(appName || '')
-  const deferredAppPackage = useDeferredValue(appPackage)
 
   const handleShowDiff = ({
     fromVersion,
@@ -110,16 +101,14 @@ const Home = () => {
     setShouldShowDiff(true)
   }
 
-  const { darkAlgorithm } = theme // Get default and dark mode states from antd.
-
   return (
     <SettingsProvider>
       <ConfigProvider
         theme={{
-          algorithm: darkAlgorithm,
+          algorithm: theme.defaultAlgorithm,
         }}
       >
-        <ThemeProvider theme={darkTheme}>
+        <ThemeProvider theme={lightTheme}>
           <Page>
             <Container>
               <HeaderContainer>
@@ -137,18 +126,16 @@ const Home = () => {
                   />
                 </Container2>
                 <SettingsContainer>
-                  <DarkModeButton isDarkMode />
+                  <DarkModeButton isDarkMode={false} />
                 </SettingsContainer>
               </HeaderContainer>
 
               <VersionSelector
-                key={defaultPackageName}
+                key={packageName}
                 showDiff={handleShowDiff}
                 // fromVersion={fromVersion}
                 // toVersion={toVersion}
-                packageName={defaultPackageName}
-                language={defaultLanguage}
-                isPackageNameDefinedInURL={isPackageNameDefinedInURL}
+                packageName={packageName}
               />
             </Container>
             <BackstageDiffViewer
