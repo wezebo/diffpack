@@ -67,19 +67,20 @@ export const useFetchDiff = ({
             switch (file.status) {
               case 'added':
                 diff += `new file mode 100644\n`
+                diff += `--- /dev/null\n`
+                diff += `+++ b/${file.filename}\n`
                 break
               case 'removed':
                 diff += `deleted file mode 100644\n`
-                break
-              case 'modified':
-                diff += `index ${file.sha}..${file.sha} 100644\n`
+                diff += `--- a/${file.filename}\n`
+                diff += `+++ /dev/null\n`
                 break
               default:
                 diff += `index ${file.sha}..${file.sha} 100644\n`
+                diff += `--- a/${file.filename}\n`
+                diff += `+++ b/${file.filename}\n`
                 break
             }
-            diff += `--- a/${file.filename}\n`
-            diff += `+++ b/${file.filename}\n`
             diff += file.patch
             diff += '\n'
           }
@@ -88,6 +89,7 @@ export const useFetchDiff = ({
         setDiff(applyBackstageDiff(response, parseDiff(diff)))
 
       } catch (e) {
+        console.log(e)
         setDiff(new Error('Failed to fetch diff. Please try again later.'))
       }
       setIsLoading(false)

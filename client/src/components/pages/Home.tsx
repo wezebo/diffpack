@@ -125,9 +125,6 @@ const Home = () => {
                     }}
                   />
                 </Container2>
-                <SettingsContainer>
-                  <DarkModeButton isDarkMode={false} />
-                </SettingsContainer>
               </HeaderContainer>
 
               <VersionSelector

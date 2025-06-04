@@ -385,12 +385,6 @@ const DiffHeader = ({
         />
       </div>
       <div>
-        <ViewFileButton
-          open={hasDiff && type !== 'delete'}
-          version={toVersion}
-          path={newPath}
-          packageName={packageName}
-        />
         <CopyFileButton
           open={hasDiff && type !== 'delete'}
           version={toVersion}
@@ -398,16 +392,6 @@ const DiffHeader = ({
           packageName={packageName}
           appName={appName}
           appPackage={appPackage}
-        />
-        <DownloadFileButton
-          open={!hasDiff && type !== 'delete'}
-          version={toVersion}
-          path={newPath}
-          packageName={packageName}
-        />{' '}
-        <CompleteDiffButton
-          open={isDiffCompleted}
-          onClick={() => onCompleteDiff(diffKey)}
         />
       </div>
     </Wrapper>
