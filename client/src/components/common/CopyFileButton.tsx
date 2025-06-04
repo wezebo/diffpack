@@ -15,8 +15,6 @@ interface CopyFileButtonProps extends ButtonProps {
   version: string
   path: string
   packageName: string
-  appName: string
-  appPackage: string
 }
 
 const CopyFileButton = styled(
@@ -25,8 +23,6 @@ const CopyFileButton = styled(
     version,
     path,
     packageName,
-    appName,
-    appPackage,
     ...props
   }: CopyFileButtonProps) => {
     const [popoverContent, setPopoverContent] = useState(

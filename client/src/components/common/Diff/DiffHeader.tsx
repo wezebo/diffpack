@@ -306,8 +306,6 @@ interface DiffHeaderProps extends WrapperProps {
   onCopyPathToClipboard: () => void
   copyPathPopoverContent: string
   resetCopyPathPopoverContent: () => void
-  appName: string
-  appPackage: string
   diffComments: ReleaseCommentT
   packageName: string
 }
@@ -327,8 +325,6 @@ const DiffHeader = ({
   onCopyPathToClipboard,
   copyPathPopoverContent,
   resetCopyPathPopoverContent,
-  appName,
-  appPackage,
   diffComments,
   packageName,
   ...props
@@ -336,8 +332,6 @@ const DiffHeader = ({
   const sanitizedFilePaths = getFilePathsToShow({
     oldPath,
     newPath,
-    appName,
-    appPackage,
   })
 
   const id = React.useMemo(
@@ -390,8 +384,6 @@ const DiffHeader = ({
           version={toVersion}
           path={newPath}
           packageName={packageName}
-          appName={appName}
-          appPackage={appPackage}
         />
       </div>
     </Wrapper>

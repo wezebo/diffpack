@@ -44,14 +44,12 @@ const Popover = styled(({ className, ...props }: PopoverProps) => (
 interface BinaryListProps {
   binaryFiles: File[]
   toVersion: string
-  appName: string
   packageName: string
 }
 
 const BinaryList: React.FC<BinaryListProps> = ({
   binaryFiles,
   toVersion,
-  appName,
   packageName,
 }) => {
   return (
@@ -59,7 +57,7 @@ const BinaryList: React.FC<BinaryListProps> = ({
       {binaryFiles.map(({ newPath }, index) => {
         return (
           <BinaryRow key={index} index={index}>
-            {removeAppPathPrefix(newPath, appName)}
+            {removeAppPathPrefix(newPath, '')}
 
             <DownloadFileButton
               open={true}
@@ -78,13 +76,11 @@ interface BinaryDownloadProps {
   diff: File[]
   fromVersion: string
   toVersion: string
-  appName: string
   packageName: string
 }
 const BinaryDownload = ({
   diff,
   toVersion,
-  appName,
   packageName,
 }: BinaryDownloadProps) => {
   const binaryFiles = diff.filter(
@@ -103,7 +99,6 @@ const BinaryDownload = ({
           <BinaryList
             binaryFiles={binaryFiles}
             toVersion={toVersion}
-            appName={appName}
             packageName={packageName}
           />
         }

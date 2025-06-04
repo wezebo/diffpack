@@ -208,8 +208,6 @@ interface DiffProps {
   areAllCollapsed?: boolean
   setAllCollapsed: (collapse: boolean | undefined) => void
   diffViewStyle: ViewType
-  appName: string
-  appPackage: string
 }
 
 const Diff = ({
@@ -228,8 +226,6 @@ const Diff = ({
   areAllCollapsed,
   setAllCollapsed,
   diffViewStyle,
-  appName,
-  appPackage,
 }: DiffProps) => {
   const [isDiffCollapsed, setIsDiffCollapsed] = useState<boolean>(
     isDiffCollapsedByDefault({ type, hunks }) || false
@@ -249,24 +245,10 @@ const Diff = ({
     }
   }
 
-  const getHunksWithAppName = useCallback(
-    (originalHunks: HunkData[]) => {
-      if (!appName && !appPackage) {
-        // No patching of rn-diff-purge output required.
-        return originalHunks
-      }
-
-      return originalHunks.map((hunk) => ({
-        ...hunk,
-        changes: hunk.changes.map((change) => ({
-          ...change,
-          content: replaceAppDetails(change.content, appName, appPackage),
-        })),
-        content: replaceAppDetails(hunk.content, appName, appPackage),
-      }))
-    },
-    [appName, appPackage]
-  )
+  const getHunksWithAppName = useCallback((originalHunks: HunkData[]) => {
+    // No patching of rn-diff-purge output required.
+    return originalHunks
+  }, [])
 
   if (areAllCollapsed !== undefined && areAllCollapsed !== isDiffCollapsed) {
     setIsDiffCollapsed(areAllCollapsed)
@@ -317,8 +299,6 @@ const Diff = ({
         copyPathPopoverContent={copyPathPopoverContent}
         resetCopyPathPopoverContent={handleResetCopyPathPopoverContent}
         onCompleteDiff={onCompleteDiff}
-        appName={appName}
-        appPackage={appPackage}
         diffComments={diffComments}
         packageName={packageName}
       />
@@ -370,9 +350,7 @@ const Diff = ({
 const arePropsEqual = (prevProps: DiffProps, nextProps: DiffProps) =>
   prevProps.isDiffCompleted === nextProps.isDiffCompleted &&
   prevProps.areAllCollapsed === nextProps.areAllCollapsed &&
-  prevProps.diffViewStyle === nextProps.diffViewStyle &&
-  prevProps.appName === nextProps.appName &&
-  prevProps.appPackage === nextProps.appPackage
+  prevProps.diffViewStyle === nextProps.diffViewStyle
 
 export default React.memo(Diff, arePropsEqual)
 
@@ -380,26 +358,5 @@ function BackstageDiffView({
   newPath,
   ...props
 }: ComponentProps<typeof DiffView> & { newPath: string }) {
-  const [showDiff, setShowDiff] = useState(false)
-
-  if (
-    (!showDiff && newPath === '.yarn/plugins/@yarnpkg/plugin-backstage.cjs') ||
-    newPath.startsWith('.yarn/releases/')
-  ) {
-    return (
-      <Card
-        bodyStyle={{
-          display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'center',
-          rowGap: '10px',
-        }}
-      >
-        <Button onClick={() => setShowDiff(true)}>Show diff</Button>
-        <Typography>The diff of this file is hidden by default.</Typography>
-      </Card>
-    )
-  }
-
   return <DiffView {...props} />
 }

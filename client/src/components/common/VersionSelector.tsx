@@ -63,38 +63,6 @@ const VersionSelector = ({
             setLocalToVersion(e.target.value)
           }}
         />
-        {/*<FromVersionSelector*/}
-        {/*  showSearch*/}
-        {/*  data-testid={testIDs.fromVersionSelector}*/}
-        {/*  title={`What's your current version?`}*/}
-        {/*  loading={isLoading}*/}
-        {/*  value={localFromVersion}*/}
-        {/*  options={fromVersionList}*/}
-        {/*  onChange={(chosenVersion) =>*/}
-        {/*    stripAnchorInUrl() && setLocalFromVersion(chosenVersion)*/}
-        {/*  }*/}
-        {/*/>*/}
-
-        {/*<ToVersionSelector*/}
-        {/*  showSearch*/}
-        {/*  data-testid={testIDs.toVersionSelector}*/}
-        {/*  title="To which version would you like to upgrade?"*/}
-        {/*  loading={isLoading}*/}
-        {/*  value={localToVersion}*/}
-        {/*  options={toVersionList}*/}
-        {/*  popover={*/}
-        {/*    localToVersion === '0.60.1' && (*/}
-        {/*      <Popover*/}
-        {/*        open={true}*/}
-        {/*        placement="topLeft"*/}
-        {/*        content="We recommend using the latest 0.60 patch release instead of 0.60.1."*/}
-        {/*      />*/}
-        {/*    )*/}
-        {/*  }*/}
-        {/*  onChange={(chosenVersion) =>*/}
-        {/*    stripAnchorInUrl() && setLocalToVersion(chosenVersion)*/}
-        {/*  }*/}
-        {/*/>*/}
       </Selectors>
 
       <UpgradeButton ref={upgradeButtonEl} onShowDiff={onShowDiff} />

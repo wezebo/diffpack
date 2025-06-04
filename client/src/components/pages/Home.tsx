@@ -1,11 +1,9 @@
-import React, { useState, ComponentProps, useDeferredValue } from 'react'
+import React, { ComponentProps, useState } from 'react'
 import styled from '@emotion/styled'
 import { ThemeProvider } from '@emotion/react'
 import { Card, ConfigProvider, Input, theme } from 'antd'
-import queryString from 'query-string'
 import VersionSelector from '../common/VersionSelector'
 import DiffViewer, { DiffViewerProps } from '../common/DiffViewer'
-import { DarkModeButton } from '../common/DarkModeButton'
 import { deviceSizes } from '../../utils/device-sizes'
 import { lightTheme, type Theme } from '../../theme'
 import { SettingsProvider } from '../../SettingsProvider'
@@ -41,15 +39,6 @@ const HeaderContainer = styled.div`
   }
 `
 
-const LogoImg = styled.img`
-  width: 50px;
-  margin-bottom: 15px;
-
-  @media ${deviceSizes.tablet} {
-    width: 100px;
-  }
-`
-
 const TitleHeader = styled.h1`
   margin: 0 0 0 15px;
 `
@@ -60,34 +49,11 @@ const TitleContainer = styled.div`
   margin-bottom: 8px;
 `
 
-const SettingsContainer = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 15px;
-  margin-bottom: 8px;
-  flex: 1;
-`
-
-const getAppInfoInURL = () => {
-  const { name, package: pkg } = queryString.parse(window.location.search)
-
-  return {
-    appPackage: pkg as string,
-    appName: name as string | null,
-  }
-}
-
 const Home = () => {
   const [packageName, setPackageName] = useState('')
   const [fromVersion, setFromVersion] = useState('')
   const [toVersion, setToVersion] = useState('')
   const [shouldShowDiff, setShouldShowDiff] = useState(false)
-
-  const appInfoInURL = getAppInfoInURL()
-  const [appName] = useState(appInfoInURL.appName)
-  // Avoid UI lag when typing.
-  const deferredAppName = useDeferredValue(appName || '')
 
   const handleShowDiff = ({
     fromVersion,
@@ -130,8 +96,6 @@ const Home = () => {
               <VersionSelector
                 key={packageName}
                 showDiff={handleShowDiff}
-                // fromVersion={fromVersion}
-                // toVersion={toVersion}
                 packageName={packageName}
               />
             </Container>
@@ -140,8 +104,6 @@ const Home = () => {
               shouldShowDiff={shouldShowDiff}
               fromVersion={fromVersion}
               toVersion={toVersion}
-              appName={deferredAppName}
-              appPackage={''}
               packageName={packageName}
             />
           </Page>

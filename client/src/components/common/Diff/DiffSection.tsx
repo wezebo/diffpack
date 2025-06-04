@@ -26,8 +26,6 @@ interface DiffSectionProps {
   selectedChanges: string[]
   onToggleChangeSelection: (args: ChangeEventArgs) => void
   diffViewStyle: ViewType
-  appName: string
-  appPackage: string
   doneTitleRef?: React.RefObject<HTMLHeadingElement>
 }
 
@@ -44,8 +42,6 @@ const DiffSection = ({
   selectedChanges,
   onToggleChangeSelection,
   diffViewStyle,
-  appName,
-  appPackage,
   doneTitleRef,
 }: DiffSectionProps) => {
   const [areAllCollapsed, setAllCollapsed] = useState<boolean | undefined>(
@@ -87,8 +83,6 @@ const DiffSection = ({
             onToggleChangeSelection={onToggleChangeSelection}
             areAllCollapsed={areAllCollapsed}
             setAllCollapsed={setAllCollapsed}
-            appName={appName}
-            appPackage={appPackage}
           />
         )
       })}

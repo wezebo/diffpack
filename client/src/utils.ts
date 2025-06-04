@@ -90,19 +90,15 @@ export const SHOW_LATEST_RCS = 'Show latest release candidates'
 export const getFilePathsToShow = ({
                                      oldPath,
                                      newPath,
-                                     appName,
-                                     appPackage
                                    }: {
   oldPath: string
   newPath: string
-  appName?: string
-  appPackage?: string
 }) => {
-  const oldPathSanitized = replaceAppDetails(oldPath, appName, appPackage)
-  const newPathSanitized = replaceAppDetails(newPath, appName, appPackage)
+  const oldPathSanitized = replaceAppDetails(oldPath, '', '')
+  const newPathSanitized = replaceAppDetails(newPath, '', '')
 
   return {
-    oldPath: removeAppPathPrefix(oldPathSanitized, appName),
-    newPath: removeAppPathPrefix(newPathSanitized, appName)
+    oldPath: removeAppPathPrefix(oldPathSanitized, ''),
+    newPath: removeAppPathPrefix(newPathSanitized, '')
   }
 }
