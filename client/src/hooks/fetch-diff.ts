@@ -28,6 +28,11 @@ export interface FileDiff {
   patch: string
 }
 
+const getRandomInt = (min: number, max: number) => {
+  min = Math.ceil(min)
+  max = Math.floor(max)
+  return Math.floor(Math.random() * (max - min + 1)) + min
+}
 export const useFetchDiff = ({
   shouldShowDiff,
   packageName,
@@ -53,7 +58,7 @@ export const useFetchDiff = ({
               toVersion,
             })
           ),
-          delay(300),
+          delay(getRandomInt(5, 10) * 1000),
         ])
 
         const res = (await response.json()) as {
@@ -87,7 +92,6 @@ export const useFetchDiff = ({
         }
 
         setDiff(applyBackstageDiff(response, parseDiff(diff)))
-
       } catch (e) {
         console.log(e)
         setDiff(new Error('Failed to fetch diff. Please try again later.'))

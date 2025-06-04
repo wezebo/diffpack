@@ -5,8 +5,6 @@ import { useSearchParam } from 'react-use'
 import UpgradeButton from './UpgradeButton'
 import { updateURL } from '../../utils/update-url'
 import { deviceSizes } from '../../utils/device-sizes'
-import { useSettings } from '../../SettingsProvider'
-import { SHOW_LATEST_RCS } from '../../utils'
 
 const Selectors = styled.div`
   display: flex;
