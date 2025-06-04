@@ -1,7 +1,11 @@
 {
   "compilerOptions": {
     "target": "es5",
-    "lib": ["dom", "dom.iterable", "esnext"],
+    "lib": [
+      "dom",
+      "dom.iterable",
+      "esnext"
+    ],
     "allowJs": true,
     "skipLibCheck": true,
     "esModuleInterop": true,
@@ -16,9 +20,15 @@
     "noEmit": true,
     "jsx": "react-jsx",
     "jsxImportSource": "@emotion/react",
-    "typeRoots": ["./node_modules/@types", "./@types"],
+    "typeRoots": [
+      "./node_modules/@types",
+      "./@types",
+      "src/releases/types.d.ts"
+    ],
     "paths": {
-      "react": ["./node_modules/@types/react"]
+      "react": [
+        "./node_modules/@types/react"
+      ]
     }
   },
   "ts-node": {
@@ -26,6 +36,12 @@
       "module": "commonjs"
     }
   },
-  "include": ["./src", "./assets"],
-  "exclude": ["./src/__tests__/*"]
+  "include": [
+    "./src",
+    "./assets",
+    "src/releases/types.d.ts"
+  ],
+  "exclude": [
+    "./src/__tests__/*"
+  ]
 }

@@ -83,7 +83,6 @@ interface BinaryDownloadProps {
 }
 const BinaryDownload = ({
   diff,
-  fromVersion,
   toVersion,
   appName,
   packageName,
