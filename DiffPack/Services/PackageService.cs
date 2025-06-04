@@ -104,8 +104,12 @@ namespace DiffPack.Services
             var (owner, name) = ParseGitUrl(gitUrl);
             http.DefaultRequestHeaders.UserAgent.ParseAdd("DiffPack");
             //http.DefaultRequestHeaders.Accept.ParseAdd("application/vnd.github.v3.diff");
-            return await http.GetStringAsync(
+            var res= await http.GetAsync(
                 $"https://api.github.com/repos/{owner}/{name}/compare/v{(version1 == "latest" ? latest : version1)}...v{(version2 == "latest" ? latest : version2)}");
+            if (res.IsSuccessStatusCode)
+                return await res.Content.ReadAsStringAsync();
+            else
+                return null;
         }
     }
 }

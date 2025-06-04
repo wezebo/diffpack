@@ -12,7 +12,7 @@ export const getDiffURL = ({
   fromVersion: string
   toVersion: string
 }) => {
-  return `${BACKEND_URL}/packages/json/?packageName=${packageName}&from=${fromVersion}&to=${toVersion}`
+  return `${BACKEND_URL}/packages/json?packageName=${packageName}&version1=${fromVersion}&version2=${toVersion}`
 }
 
 
